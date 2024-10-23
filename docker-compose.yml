@@ -15,7 +15,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
     build:
       dockerfile: Dockerfile.dev
-      context: frontend/nextjs
+      context: ./frontend/nextjs
     volumes:
       - /app/node_modules
       - ./frontend/nextjs:/app
