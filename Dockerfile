@@ -1,17 +1,24 @@
 # Stage 1: Browser and build tools installation
-FROM python:3.11.4-slim-bullseye AS install-browser
+FROM python:3.11-bullseye AS install-browser
 
-# Install Chromium, Chromedriver, Firefox, Geckodriver, and build tools in one layer
+# Install Chromium, Chromedriver, Firefox, Geckodriver, build tools, Rust, and required libraries in one layer
 RUN apt-get update && \
     apt-get satisfy -y "chromium, chromium-driver (>= 115.0)" && \
-    apt-get install -y --no-install-recommends firefox-esr wget build-essential && \
+    apt-get install -y --no-install-recommends firefox-esr wget \
+    build-essential cmake curl libclang-dev clang llvm-dev && \
     wget https://github.com/mozilla/geckodriver/releases/download/v0.33.0/geckodriver-v0.33.0-linux64.tar.gz && \
     tar -xvzf geckodriver-v0.33.0-linux64.tar.gz && \
     chmod +x geckodriver && \
     mv geckodriver /usr/local/bin/ && \
     rm geckodriver-v0.33.0-linux64.tar.gz && \
     chromium --version && chromedriver --version && \
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    . $HOME/.cargo/env && \
+    rustc --version && cargo --version && \
     rm -rf /var/lib/apt/lists/*  # Clean up apt lists to reduce image size
+
+ENV PATH="/root/.cargo/bin:${PATH}"
+ENV LIBCLANG_PATH="/usr/lib/llvm-11/lib"
 
 # Stage 2: Python dependencies installation
 FROM install-browser AS gpt-researcher-install
