@@ -3,13 +3,10 @@ services:
     pull_policy: build
     image: gptresearcher/gpt-researcher
     build: ./
-    environment: 
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      TAVILY_API_KEY: ${TAVILY_API_KEY}
-      LANGCHAIN_API_KEY: ${LANGCHAIN_API_KEY}
+    env_file: stack.env
     restart: always
     ports:
-      - 8000:8000
+      - 10005:8000
   gptr-nextjs:
     pull_policy: build
     image: gptresearcher/gptr-nextjs
@@ -24,15 +21,12 @@ services:
       - ./frontend/nextjs:/app
     restart: always
     ports:
-      - 3000:3000
+      - 10006:3000
 
   gpt-researcher-tests:
     image: gptresearcher/gpt-researcher-tests
     build: ./
-    environment: 
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      TAVILY_API_KEY: ${TAVILY_API_KEY}
-      LANGCHAIN_API_KEY: ${LANGCHAIN_API_KEY}
+    env_file: stack.env
     profiles: ["test"]
     command: >
       /bin/sh -c "
