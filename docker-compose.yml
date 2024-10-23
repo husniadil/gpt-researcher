@@ -1,7 +1,7 @@
 services:
   gpt-researcher:
     pull_policy: build
-    image: gptresearcher/gpt-researcher
+    image: gptresearcher/gpt-researcher:0.8.1
     build: ./
     env_file: stack.env
     restart: always
