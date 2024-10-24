@@ -7,6 +7,7 @@ services:
     ports:
       - 10005:8000
   gptr-nextjs:
+    container_name: gptr-nextjs
     pull_policy: build
     image: gptresearcher/gptr-nextjs
     stdin_open: true
